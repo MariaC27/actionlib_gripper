@@ -49,7 +49,7 @@ class GripperAction(object):
 				#rob.close()
 				#print "true"
 				#sys.exit()
-			
+			#authorfix
 			
 			rospy.loginfo('Print request of %s'%(goal.request))
 

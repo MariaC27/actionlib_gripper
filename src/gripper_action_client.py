@@ -20,7 +20,7 @@ def gripper_client():
 	client.wait_for_server()
 
 	retStr = String()
-	retStr.data = "open"	
+	retStr.data = "close"	
 	
 	goal = actionlib_gripper.msg.GripperGoal(request = retStr)
 

@@ -1,11 +1,13 @@
 #! /usr/bin/env python
 
 from std_msgs.msg import String
-#from urx.robotiq_two_finger_gripper import Robotiq_Two_Finger_Gripper
+from urx.robotiq_two_finger_gripper import Robotiq_Two_Finger_Gripper
 
 import rospy
 
 import urx
+
+import sys
 
 import actionlib
 
@@ -14,6 +16,8 @@ import actionlib_gripper.msg
 
 class GripperAction(object):
 	_result = actionlib_gripper.msg.GripperResult()
+
+
 
 
 
@@ -43,17 +47,13 @@ class GripperAction(object):
 
 
 		if success:
-			#check request string and call functions to open and close gripper
-			#gripper = Robotiq_Two_Finger_Gripper(robot, 1.25)
-			#then return true
-			#if(request = 'close') --> robotiqgrip.close_gripper()
-			#if(request = 'open') --> robotiqugrip.open_gripper()
-			#rob.send_program(robotiqgrip.ret_program_to_run())
-				#rob.close()
-				#print "true"
-				#sys.exit()
-			#authorfix
 			
+			
+			rob = urx.Robot("172.22.22.2")
+	
+
+			robotiqgrip = Robotiq_Two_Finger_Gripper(rob, 1.25)
+
 			rospy.loginfo('Print request of %s'%(goal.request))
 
 			#need to do this so data type matches the request
@@ -68,34 +68,30 @@ class GripperAction(object):
 			if (goal.request == compStr1):
 				#open gripper:
 				check = True
-				#robotiqgrip.open_gripper()
+				robotiqgrip.open_gripper()
 				rospy.loginfo('Reached if')
 				
 
 			elif (goal.request == compStr2):
 				#close gripper:
 				check = False
-				#robotiqgrip.close_gripper()
+				robotiqgrip.close_gripper()
 				rospy.loginfo('Reached elseif') 
 			
-				
+			#rob.send_program(robotiqgrip.ret_program_to_run())
+			rob.close()
+			sys.exit() 	
 			
 			self._result.OpenOrClose = check
 			rospy.loginfo('%s: Succeeded' % self._action_name)
 	            	self._as.set_succeeded(self._result)
 
-			#rob.send_program(robotiqgrip.ret_program_to_run())
-			#rob.close()
-			#sys.exit() 
-
-
+			
 if __name__ == '__main__':
 	rospy.init_node('Gripper')
 	server = GripperAction(rospy.get_name())
 
-	#rob = urx.Robot("172.22.22.2")
-	#this IP will cause timeout error whenever not actually connected to robot
-
-	#robotiqgrip = Robotiq_Two_Finger_Gripper(rob, 1.25)
-
+       
 	rospy.spin()
+
+
